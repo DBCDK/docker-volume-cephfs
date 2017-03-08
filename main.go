@@ -4,24 +4,33 @@ import (
 	"fmt"
 
 	"github.com/docker/go-plugins-helpers/volume"
+	"path/filepath"
 )
 
 const (
 	cephfsId = "_cephfs"
 	socketAddress = "/run/docker/plugins/cephfs.sock"
+	defaultPath = filepath.Join(volume.DefaultDockerRootDirectory, cephfsId)
 )
 
 func main() {
 
 	var Usage = func() {
-		fmt.Println("Hello, 世界")
+		fmt.Println("LATIN CAPITAL LETTER AA Ꜳ ꜳ")
+		fmt.Println("   LAO VOWEL SIGN AA າ ຳ")
+	}
+
+	var setup = func() {
+		fmt.Printf("Path %s\n", defaultPath)
 	}
 
 	Usage()
+	setup()
 	
-
-	//driver := newCephFSDriver( "/tmp/cephfs")
-	driver := newCephFSDriver( "/mnt/cephfs_root/")
+	driver,err := newCephFSDriver( defaultPath )
+	if( err != nil ) {
+		return
+	}
 	h := volume.NewHandler( driver );
 
 	fmt.Printf("Listening on %s\n", socketAddress)

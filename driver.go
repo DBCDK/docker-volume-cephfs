@@ -13,10 +13,22 @@ type cephFSDriver struct {
 	root string
 }
 
-func newCephFSDriver( root  string  ) cephFSDriver {
+/**
+
+ */
+func newCephFSDriver( root  string  ) (cephFSDriver, error) {
+	if  !IsDirectory( root ) {
+		err := os.MkdirAll( root , os.ModePerm)
+		if( err != nil ) {
+			log.Print(fmt.Sprintf(" Directory %s Dont Exists, and unable to Create IT ", root ))
+			log.Print(fmt.Sprintf(" mkdir failed with:  %s", err ))
+			return cephFSDriver{}, err
+		}
+	}
+	
 	return cephFSDriver{
 		root: root,
-	}
+	}, nil
 }
 
 func (d cephFSDriver ) Create( r volume.Request ) volume.Response {
