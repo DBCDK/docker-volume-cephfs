@@ -8,8 +8,11 @@ import (
 )
 
 const (
-	cephfsId = "_cephfs"
+	cephfsId      = "_cephfs"
 	socketAddress = "/run/docker/plugins/cephfs.sock"
+)
+
+var (
 	defaultPath = filepath.Join(volume.DefaultDockerRootDirectory, cephfsId)
 )
 
@@ -26,14 +29,13 @@ func main() {
 
 	Usage()
 	setup()
-	
-	driver,err := newCephFSDriver( defaultPath )
-	if( err != nil ) {
+
+	driver, err := newCephFSDriver(defaultPath)
+	if err != nil {
 		return
 	}
-	h := volume.NewHandler( driver );
+	h := volume.NewHandler(driver)
 
 	fmt.Printf("Listening on %s\n", socketAddress)
 	fmt.Println(h.ServeUnix(socketAddress, 1))
 }
-
